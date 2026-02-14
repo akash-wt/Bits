@@ -1,14 +1,15 @@
 import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { connectWallet, signInNonce } from "./solana/connectWallet";
-import { useState } from "react";
+import { connectWalletAndVerifyNonce,  } from "./solana/connectWalletAndVerfiyNonce";
+
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Text>Open up App.tsx to start on your app!</Text>
-      <Button title="verfiy wallet" onPress={connectWallet}></Button>
-      <Button title="signin nonce" onPress={signInNonce}></Button>
+
+      <Button  title="signin nonce" onPress={connectWalletAndVerifyNonce}></Button>
+
       <StatusBar style="auto" />
     </View>
   );
@@ -22,4 +23,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 20,
   },
+  button:{
+    height:4,
+    width:4,
+    backgroundColor:"black",
+    color:"white"
+  }
 });
