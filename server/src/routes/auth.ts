@@ -2,7 +2,7 @@ import { Router } from "express";
 import { VerifySchema } from "../types/auth.js";
 import nacl from "tweetnacl";
 import { Buffer } from "buffer";
-import crypto from "crypto";
+
 
 
 const router = Router()
@@ -41,15 +41,6 @@ router.post("/verify", async (req, res) => {
 
 
 
-
-router.get("/nonce", async (req, res) => {
-  const nonce = crypto.randomUUID();
-
-  // store nonce temporarily (DB or memory)
-  // example: saveNonce(pubkey, nonce)
-
-  res.json({ nonce });
-});
 
 export default router;
 
