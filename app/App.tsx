@@ -1,16 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { checkUserExist } from "./solana/walletAuth";
+import { checkUserExist, signNonceMessage } from "./solana/walletAuth";
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Text>Open up App.tsx to start on your app!</Text>
 
-      <Button
-        title="signin nonce"
-        onPress={checkUserExist}
-      ></Button>
+      <Button title="signin nonce" onPress={checkUserExist}></Button>
 
       <StatusBar style="auto" />
     </View>
