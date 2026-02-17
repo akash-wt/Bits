@@ -11,7 +11,7 @@ app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/user", userRouter)
 
 
-app.listen(3000, () => {
+app.listen(3000, "0.0.0.0", () => {
   console.log("Runtime DB URL:", process.env.DATABASE_URL);
 
   console.log('Server is running on http://localhost:3000')

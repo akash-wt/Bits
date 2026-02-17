@@ -6,8 +6,11 @@ const router = Router()
 
 router.post("/check", async (req, res) => {
     try {
+        console.log("got call heer");
+
         const nonce = crypto.randomUUID().toString();
         const parseBody = UserSchema.safeParse(req.body);
+        
         if (!parseBody.success) {
             return res.status(400).json({ msg: "Incorrect inputs" });
         }
@@ -38,7 +41,9 @@ router.post("/check", async (req, res) => {
             }
         })
 
-        res.json({ nonce, userExist });
+        console.log("about to return call ");
+
+      return res.json({ nonce, userExist });
     } catch (e: any) {
         console.log(e);
         throw new Error("user/nonce failed", e)
