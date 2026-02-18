@@ -3,18 +3,9 @@ import {
     Web3MobileWallet,
 } from "@solana-mobile/mobile-wallet-adapter-protocol-web3js";
 import axios from "axios"
-import { BACKEND_URL_USB } from "../config";
+import { APP_IDENTITY, BACKEND_URL_USB } from "../config";
 import * as BufferModule from "buffer"
-
-const APP_IDENTITY = {
-    name: "Bits",
-    uri: "https://bits.app",
-    icon: "favicon.ico",
-};
 window.Buffer = BufferModule.Buffer;
-
-let message = 'Please sign this message to verify your identity. Nonce: ';
-
 
 async function connectWallet() {
     return await transact(async (wallet: Web3MobileWallet) => {
@@ -46,7 +37,6 @@ export async function signNonceMessage(nonce: string, address: string) {
 
             const message = `Please sign this message to verify your identity. Nonce: ${nonce}`;
 
-
             const messageBuffer = new Uint8Array(
                 message.split('').map(c => c.charCodeAt(0)),
             );
@@ -65,19 +55,17 @@ export async function signNonceMessage(nonce: string, address: string) {
 
 }
 
-
 export async function checkUserExist() {
     try {
 
-        //    1. For checking if user exist or not if yes we get nonce if not we create user then send nonce.
-
+        // 1. For checking if user exist or not if yes we get nonce if not we create user then send nonce.
         const connectWalletresponse = await connectWallet();
 
         if (!connectWalletresponse?.address) {
             throw new Error("wallet doesn't retuned address");
         }
 
-        //   2. nonce from server. 
+        // 2. nonce from server. 
         const nonceResponse = await axios.post(`${BACKEND_URL_USB}/user/check`, {
             "publicKey": connectWalletresponse.address
         })
@@ -87,10 +75,8 @@ export async function checkUserExist() {
         if (nonceResponse.data.userExist.pubKey !== connectWalletresponse.address) {
             throw new Error("Wallet public key mismatch!");
         }
-        //    3. Signed nonce with wallet.
+        // 3. Signed nonce with wallet.
         const signedMessages = await signNonceMessage(nonceResponse.data.nonce, connectWalletresponse.address);
-
-        console.log("nonce response ", signedMessages);
 
         if (!signedMessages) {
             throw new Error("Nonce sign failed!")
@@ -98,18 +84,12 @@ export async function checkUserExist() {
         // 4. verifying nonce...  if true issue JWT
 
         const signatureBase64 = Buffer.from(signedMessages[0]).toString("base64")
-
-        console.log(signatureBase64);
-
         const JWTResponse = await axios.post(`${BACKEND_URL_USB}/auth/verify/nonce`, {
             publicKey: connectWalletresponse.address,
             signature: signatureBase64,
             signedMessage: message
 
         })
-
-        console.log("JWTResponse ", JWTResponse.data);
-
 
     } catch (e) {
         console.log("error ", e);

@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { checkUserExist, signNonceMessage } from "./solana/walletAuth";
+import { checkUserExist, signNonceMessage } from "./src/solana/walletAuth";
 
 export default function App() {
   return (
