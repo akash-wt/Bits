@@ -4,6 +4,7 @@ import {
 } from "@solana-mobile/mobile-wallet-adapter-protocol-web3js";
 import axios from "axios"
 import { APP_IDENTITY, BACKEND_URL_USB } from "../config";
+import { mmkvStorage } from "@/lib/storage";
 import * as BufferModule from "buffer"
 window.Buffer = BufferModule.Buffer;
 
@@ -90,6 +91,15 @@ export async function checkUserExist() {
             signedMessage: message
 
         })
+        console.log(connectWalletresponse);
+
+
+        mmkvStorage.setItem("auth_user", JSON.stringify({
+            publicKey: connectWalletresponse.address,
+            jwt: JWTResponse.data.token,
+        }))
+        return JWTResponse;
+
 
     } catch (e) {
         console.log("error ", e);
