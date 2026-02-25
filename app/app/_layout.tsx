@@ -7,7 +7,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="chat/[chat]" />
+        <Stack.Screen name="chat/[roomId]" />
         <Stack.Screen name="token/[mint]" />
       </Stack>
     </SafeAreaProvider>
