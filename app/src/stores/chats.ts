@@ -9,101 +9,106 @@ interface ChatRoomState {
 }
 
 interface ChatStore {
+
   chats: Record<string, ChatRoomState>;
 
   addMessage: (roomId: string, message: ChatMessage) => void;
-//   markMessageAsRead: (roomId: string, messageId: string) => void;
-//   markRoomAsRead: (roomId: string) => void;
+  //   markMessageAsRead: (roomId: string, messageId: string) => void;
+  //   markRoomAsRead: (roomId: string) => void;
   clearRoom: (roomId: string) => void;
 }
 
-export const useChatStore = create<ChatStore>((set, get) => ({
-  chats: {},
+export const useChatStore = create<ChatStore>()(
+  persist((set, get) => ({
+    chats: {},
 
-
-
-
-  addMessage: (roomId, message) =>
-    set((state) => {
+    addMessage: (roomId, message) =>
+      set((state) => {
         console.log("hi there ");
-        
-      const room = state.chats[roomId] ?? {
-        messages: [],
-        unreadCount: 0,
-      };
 
-      const isIncoming =
-        message.status !== "read" &&
-        message.senderKey !== "user1"; // current user
+        const room = state.chats[roomId] ?? {
+          messages: [],
+          unreadCount: 0,
+        };
 
-      return {
-        chats: {
-          ...state.chats,
-          [roomId]: {
-            messages: [...room.messages, message],
-            unreadCount: isIncoming
-              ? room.unreadCount + 1
-              : room.unreadCount,
+        const isIncoming =
+          message.status !== "read" &&
+          message.senderKey !== "user1"; // current user
+
+        return {
+          chats: {
+            ...state.chats,
+            [roomId]: {
+              messages: [...room.messages, message],
+              unreadCount: isIncoming
+                ? room.unreadCount + 1
+                : room.unreadCount,
+            },
           },
-        },
-      };
-    }),
+        };
+      }),
 
-//   markMessageAsRead: (roomId, messageId) =>
-//     set((state) => {
-//       const room = state.chats[roomId];
-//       if (!room) return state;
+    //   markMessageAsRead: (roomId, messageId) =>
+    //     set((state) => {
+    //       const room = state.chats[roomId];
+    //       if (!room) return state;
 
-//       let unreadReduced = 0;
+    //       let unreadReduced = 0;
 
-//       const updated = room.messages.map((msg) => {
-//         if (msg.id === messageId && msg.status !== "read") {
-//           unreadReduced++;
-//           return { ...msg, status: "read" };
-//         }
-//         return msg;
-//       });
+    //       const updated = room.messages.map((msg) => {
+    //         if (msg.id === messageId && msg.status !== "read") {
+    //           unreadReduced++;
+    //           return { ...msg, status: "read" };
+    //         }
+    //         return msg;
+    //       });
 
-//       return {
-//         chats: {
-//           ...state.chats,
-//           [roomId]: {
-//             messages: updated,
-//             unreadCount: Math.max(
-//               room.unreadCount - unreadReduced,
-//               0
-//             ),
-//           },
-//         },
-//       };
-//     }),
+    //       return {
+    //         chats: {
+    //           ...state.chats,
+    //           [roomId]: {
+    //             messages: updated,
+    //             unreadCount: Math.max(
+    //               room.unreadCount - unreadReduced,
+    //               0
+    //             ),
+    //           },
+    //         },
+    //       };
+    //     }),
 
-//   markRoomAsRead: (roomId) =>
-//     set((state) => {
-//       const room = state.chats[roomId];
-//       if (!room) return state;
+    //   markRoomAsRead: (roomId) =>
+    //     set((state) => {
+    //       const room = state.chats[roomId];
+    //       if (!room) return state;
 
-//       const updatedMessages = room.messages.map((msg) =>
-//         msg.status !== "read"
-//           ? { ...msg, status: "read" }
-//           : msg
-//       );
+    //       const updatedMessages = room.messages.map((msg) =>
+    //         msg.status !== "read"
+    //           ? { ...msg, status: "read" }
+    //           : msg
+    //       );
 
-//       return {
-//         chats: {
-//           ...state.chats,
-//           [roomId]: {
-//             messages: updatedMessages,
-//             unreadCount: 0,
-//           },
-//         },
-//       };
-//     }),
+    //       return {
+    //         chats: {
+    //           ...state.chats,
+    //           [roomId]: {
+    //             messages: updatedMessages,
+    //             unreadCount: 0,
+    //           },
+    //         },
+    //       };
+    //     }),
 
-  clearRoom: (roomId) =>
-    set((state) => {
-      const updated = { ...state.chats };
-      delete updated[roomId];
-      return { chats: updated };
-    }),
-}));
+    clearRoom: (roomId) =>
+      set((state) => {
+        const updated = { ...state.chats };
+        delete updated[roomId];
+        return { chats: updated };
+      }),
+
+  }),{
+    name:"chat-storage",
+    storage:createJSONStorage(()=>mmkvStorage)
+  })
+
+);
