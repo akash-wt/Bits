@@ -154,44 +154,21 @@ export default function ChatScreen() {
       </View>
 
       {showModal && (
-        <View
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0,0,0,0.6)",
-            justifyContent: "center",
-            padding: 24,
-            zIndex: 999,
-            elevation: 10,
-          }}
-          pointerEvents="auto"
-        >
+        <View style={styles.showModelMain} pointerEvents="auto">
           <View
             style={{
-              backgroundColor: "#1e293b",
+              backgroundColor: "#000000",
               padding: 20,
-              borderRadius: 12,
             }}
           >
-            <Text style={{ color: "white", marginBottom: 12 }}>
-              Enter Recipient Public Key
-            </Text>
+            <Text style={styles.showModelText}>Enter Recipient Public Key</Text>
 
             <TextInput
               value={newChatPubKey}
               onChangeText={setNewChatPubKey}
               placeholder="Solana Public Key"
-              placeholderTextColor="#64748b"
-              style={{
-                backgroundColor: "#0f172a",
-                color: "white",
-                padding: 12,
-                borderRadius: 8,
-                marginBottom: 16,
-              }}
+              placeholderTextColor="#000000"
+              style={styles.showModelTextInput}
             />
 
             <TouchableOpacity
@@ -207,21 +184,16 @@ export default function ChatScreen() {
 
                 setNewChatPubKey("");
               }}
-              style={{
-                backgroundColor: "#6366f1",
-                padding: 12,
-                borderRadius: 8,
-                alignItems: "center",
-              }}
+              style={styles.showModelNewChatButton}
             >
-              <Text style={{ color: "white" }}>Start Chat</Text>
+              <Text style={styles.showModelNewChatButtonText}>Start Chat</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => setShowModal(false)}
               style={{ marginTop: 10, alignItems: "center" }}
             >
-              <Text style={{ color: "#94a3b8" }}>Cancel</Text>
+              <Text style={styles.showModelCancelText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -276,7 +248,7 @@ export default function ChatScreen() {
 
       <TouchableOpacity
         onPress={() => setShowModal(true)}
-        style={styles.fab}
+        style={styles.newChat}
         activeOpacity={0.8}
       >
         <Feather name="message-circle" size={24} color="white" />
@@ -400,7 +372,7 @@ const styles = StyleSheet.create({
   badge: {
     backgroundColor: "#000000",
     paddingHorizontal: 6,
-    textAlign:"center"
+    textAlign: "center",
   },
 
   badgeText: {
@@ -408,11 +380,32 @@ const styles = StyleSheet.create({
     fontFamily: "VT323_400Regular",
     fontSize: 16,
   },
+  // when there is no chats
 
+  empty: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
-
-
-
+  // new chat
+  newChat: {
+    position: "absolute",
+    bottom: 30,
+    right: 20,
+    width: 60,
+    height: 50,
+    borderRadius: 3,
+    backgroundColor: "#000000",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    // Elevation (Android)
+    elevation: 8,
+  },
 
   pixelWrapper: {
     position: "relative",
@@ -442,33 +435,54 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
   },
 
-
-
-
-  empty: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  fab: {
+  showModelMain: {
     position: "absolute",
-    bottom: 30,
-    right: 20,
-    width: 60,
-    height: 50,
-    borderRadius: 7,
-    backgroundColor: "#000000",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.6)",
     justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-
-    // Elevation (Android)
-    elevation: 8,
+    padding: 24,
+    zIndex: 999,
+    elevation: 10,
   },
+
+  showModelTextInput: {
+    backgroundColor: "#ffffff",
+    color: "#000000",
+    padding: 12,
+    marginBottom: 16,
+    fontFamily: "VT323_400Regular",
+    fontSize: 18,
+    letterSpacing: 2,
+  },
+  showModelText: {
+    fontFamily: "VT323_400Regular",
+    fontSize: 20,
+    letterSpacing: 2,
+    color: "#ffffff",
+    marginBottom: 12,
+  },
+  showModelNewChatButton: {
+    backgroundColor: "#ffffff",
+    padding: 12,
+    alignItems: "center",
+  },
+
+  showModelNewChatButtonText: {
+    color: "#000000",
+    fontFamily: "VT323_400Regular",
+    fontSize: 20,
+    letterSpacing: 2,
+  },
+  showModelCancelText: {
+    color: "#ffffff",
+    fontFamily: "VT323_400Regular",
+    fontSize: 20,
+    letterSpacing: 2,
+  },
+
   emptyIcon: { fontSize: 40, marginBottom: 12 },
   emptyText: { color: "#000000", fontSize: 14 },
 });
