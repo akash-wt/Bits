@@ -139,7 +139,7 @@ export default function ChatScreen() {
         <View style={styles.searchBox}>
           <TextInput
             placeholder="Search"
-            placeholderTextColor="#ffffff"
+            placeholderTextColor="#000000"
             value={search}
             onChangeText={setSearch}
             style={styles.searchInputNew}
@@ -290,35 +290,35 @@ const styles = StyleSheet.create({
 
   // search bar
   searchContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    backgroundColor: "#000000",
+    paddingHorizontal: 20,
+    paddingVertical: 6,
+    backgroundColor: "#ffffff",
   },
 
   clearIcon: {
-    color: "#ffffff",
-    fontSize: 18,
+    color: "#000000",
+    fontSize: 20,
     paddingLeft: 10,
   },
 
   searchBox: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#000000",
-    paddingHorizontal: 16,
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 10,
     height: 45,
     borderWidth: 1,
-    borderColor: "#ffffff",
+    borderColor: "#000000",
   },
 
   searchInputNew: {
     flex: 1,
-    color: "#ffffff",
-    fontSize: 22,
+    color: "#000000",
+    fontSize: 20,
     fontFamily: "VT323_400Regular",
   },
 
-    // filter options
+  // filter options
   filterRow: {
     backgroundColor: "#ffffff",
     flexDirection: "row",
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 6,
     marginVertical: 4,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "#000000",
   },
 
@@ -353,8 +353,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "VT323_400Regular",
   },
-
-  
 
   pixelWrapper: {
     position: "relative",
@@ -383,9 +381,6 @@ const styles = StyleSheet.create({
     fontFamily: "VT323_400Regular",
     letterSpacing: 3,
   },
-
-
-
 
   chatItem: {
     paddingHorizontal: 20,
