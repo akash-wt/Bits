@@ -13,7 +13,7 @@ import { useRouter } from "expo-router";
 import { useChatStore } from "@/stores/chats";
 import { ChatMessage } from "@/types/chat";
 import { mmkvStorage } from "@/lib/storage";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { shortenKey } from "@/lib/trimString";
 
 export default function ChatScreen() {
@@ -125,11 +125,9 @@ export default function ChatScreen() {
 
         {/* User Public Key */}
         {shortKey ? (
-          <View style={styles.pixelWrapper}>
-            <View style={styles.pixelShadow} />
-            <View style={styles.pixelButton}>
-              <Text style={styles.pixelText}>{shortKey}</Text>
-            </View>
+          <View style={styles.pixelButton}>
+            <Ionicons name="wallet" size={20} color="white" />
+            <Text style={styles.pixelText}>{shortKey}</Text>
           </View>
         ) : null}
       </View>
@@ -407,34 +405,6 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 
-  pixelWrapper: {
-    position: "relative",
-    alignSelf: "flex-start",
-  },
-
-  pixelShadow: {
-    position: "absolute",
-    top: 6,
-    left: 6,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "#ffffff",
-  },
-
-  pixelButton: {
-    backgroundColor: "#ffffff",
-    paddingHorizontal: 1,
-    borderWidth: 3,
-    borderColor: "#000000",
-  },
-
-  pixelText: {
-    fontSize: 22,
-    color: "#000000",
-    fontFamily: "VT323_400Regular",
-    letterSpacing: 3,
-  },
-
   showModelMain: {
     position: "absolute",
     top: 0,
@@ -480,6 +450,20 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontFamily: "VT323_400Regular",
     fontSize: 20,
+    letterSpacing: 2,
+  },
+
+  pixelButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10, // spacing between icon and text
+    backgroundColor: "#000000",
+  },
+
+  pixelText: {
+    fontSize: 22,
+    color: "#ffffff",
+    fontFamily: "VT323_400Regular",
     letterSpacing: 2,
   },
 
