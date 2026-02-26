@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#ffffff",
     paddingHorizontal: 10,
-    height: 45,
+    height: 40,
     borderWidth: 1,
     borderColor: "#000000",
   },
@@ -315,6 +315,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "#000000",
     fontSize: 20,
+    letterSpacing: 2,
     fontFamily: "VT323_400Regular",
   },
 
@@ -323,13 +324,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     flexDirection: "row",
     paddingHorizontal: 20,
-    marginBottom: 1,
+    // marginBottom: 0.5,
     gap: 8,
   },
 
   tab: {
-    paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
     marginVertical: 4,
     borderWidth: 1,
     borderColor: "#000000",
@@ -337,22 +338,81 @@ const styles = StyleSheet.create({
 
   tabActive: {
     paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingVertical: 2,
     marginVertical: 4,
     backgroundColor: "#000000",
   },
 
   tabText: {
     color: "#000000",
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: "VT323_400Regular",
   },
 
   tabTextActive: {
     color: "#ffffff",
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: "VT323_400Regular",
   },
+
+  // chats
+  chatItem: {
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderBottomWidth: 0.2,
+    borderBottomColor: "#000000",
+  },
+
+  chatInfo: { flex: 1 },
+
+  chatTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 4,
+  },
+
+  chatName: {
+    fontSize: 22,
+    letterSpacing: 2,
+    fontFamily: "VT323_400Regular",
+    color: "#000000",
+  },
+
+  chatTime: {
+    fontSize: 18,
+    fontFamily: "VT323_400Regular",
+    color: "#000000",
+  },
+
+  chatBottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  lastMsg: {
+    letterSpacing: 1,
+    fontSize: 18,
+    color: "#000000",
+    flex: 1,
+    fontFamily: "VT323_400Regular",
+  },
+
+  badge: {
+    backgroundColor: "#000000",
+    paddingHorizontal: 6,
+    textAlign:"center"
+  },
+
+  badgeText: {
+    color: "#ffffff",
+    fontFamily: "VT323_400Regular",
+    fontSize: 16,
+  },
+
+
+
+
+
 
   pixelWrapper: {
     position: "relative",
@@ -382,64 +442,15 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
   },
 
-  chatItem: {
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "#000000",
-  },
 
-  chatInfo: { flex: 1 },
 
-  chatTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 4,
-  },
-
-  chatName: {
-    fontSize: 20,
-    fontFamily: "VT323_400Regular",
-    color: "#000000",
-  },
-
-  chatTime: {
-    fontSize: 12,
-    color: "#000000",
-  },
-
-  chatBottom: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  lastMsg: {
-    fontSize: 20,
-    color: "#000000",
-    flex: 1,
-    fontFamily: "VT323_400Regular",
-    marginRight: 8,
-  },
-
-  badge: {
-    backgroundColor: "#6366f1",
-    borderRadius: 10,
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-  },
-
-  badgeText: {
-    color: "#ffffff",
-    fontSize: 11,
-    // fontWeight: "700",
-    fontFamily: "VT323_400Regular",
-  },
 
   empty: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
+
   fab: {
     position: "absolute",
     bottom: 30,
