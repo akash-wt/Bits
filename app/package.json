@@ -9,7 +9,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@expo/vector-icons": "^15.0.3",
+    "@expo-google-fonts/vt323": "^0.4.1",
+    "@expo/vector-icons": "^15.1.1",
     "@solana-mobile/mobile-wallet-adapter-protocol": "^2.2.5",
     "@solana-mobile/mobile-wallet-adapter-protocol-web3js": "^2.2.5",
     "@solana/web3.js": "^1.98.4",
@@ -19,6 +20,7 @@
     "expo": "~54.0.33",
     "expo-constants": "~18.0.13",
     "expo-crypto": "~15.0.8",
+    "expo-font": "^55.0.4",
     "expo-linking": "~8.0.11",
     "expo-router": "~6.0.23",
     "expo-status-bar": "~3.0.9",

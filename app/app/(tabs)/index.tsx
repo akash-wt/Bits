@@ -12,13 +12,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useChatStore } from "@/stores/chats";
 import { ChatMessage } from "@/types/chat";
+import { mmkvStorage } from "@/lib/storage";
+import { Feather } from "@expo/vector-icons";
+import { shortenKey } from "@/lib/trimString";
 
 export default function ChatScreen() {
   const router = useRouter();
   const { chats } = useChatStore();
   const [showModal, setShowModal] = useState(false);
   const [newChatPubKey, setNewChatPubKey] = useState("");
-
+  const authRaw = mmkvStorage.getItem("auth_user");
+  const user = authRaw ? JSON.parse(authRaw) : null;
+  const shortKey = user?.publicKey ? shortenKey(user.publicKey) : "";
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "unread">("all");
 
@@ -39,11 +44,9 @@ export default function ChatScreen() {
     const matchSearch =
       room.roomId.toLowerCase().includes(search.toLowerCase()) ||
       room.lastMessage?.text.toLowerCase().includes(search.toLowerCase());
-
     if (filter === "unread") {
       return matchSearch && room.unreadCount > 0;
     }
-
     return matchSearch;
   });
 
@@ -97,23 +100,57 @@ export default function ChatScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
-      <StatusBar barStyle="light-content" backgroundColor="#0a0f1e" />
+      <StatusBar barStyle="light-content" backgroundColor="#000000" />
+      {/* header */}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingHorizontal: 20,
+          paddingVertical: 12,
+          backgroundColor: "#000000",
+        }}
+      >
+        {/* App Name */}
+        <Text
+          style={{
+            fontSize: 35,
+            color: "#ffffff",
+            fontFamily: "VT323_400Regular",
+          }}
+        >
+          Bits
+        </Text>
+
+        {/* User Public Key */}
+        {shortKey ? (
+          <View style={styles.pixelWrapper}>
+            <View style={styles.pixelShadow} />
+            <View style={styles.pixelButton}>
+              <Text style={styles.pixelText}>{shortKey}</Text>
+            </View>
+          </View>
+        ) : null}
+      </View>
 
       {/* Search */}
-      <View style={styles.searchWrap}>
-        <Text style={styles.searchIcon}>🔍</Text>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search messages..."
-          placeholderTextColor="#475569"
-          value={search}
-          onChangeText={setSearch}
-        />
-        {search.length > 0 && (
-          <TouchableOpacity onPress={() => setSearch("")}>
-            <Text style={styles.clearBtn}>✕</Text>
-          </TouchableOpacity>
-        )}
+      <View style={styles.searchContainer}>
+        <View style={styles.searchBox}>
+          <TextInput
+            placeholder="Search"
+            placeholderTextColor="#ffffff"
+            value={search}
+            onChangeText={setSearch}
+            style={styles.searchInputNew}
+          />
+
+          {search.length > 0 && (
+            <TouchableOpacity onPress={() => setSearch("")}>
+              <Text style={styles.clearIcon}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       {showModal && (
@@ -190,10 +227,6 @@ export default function ChatScreen() {
         </View>
       )}
 
-      <TouchableOpacity onPress={() => setShowModal(true)}>
-        <Text style={{ color: "red" }}>New Chat</Text>
-      </TouchableOpacity>
-
       {/* Filter */}
       <View style={styles.filterRow}>
         <TouchableOpacity
@@ -221,6 +254,7 @@ export default function ChatScreen() {
 
       {/* List */}
       <FlatList
+        style={{ backgroundColor: "#ffffff" }}
         keyboardShouldPersistTaps="handled"
         data={filtered}
         keyExtractor={(item) => item.roomId}
@@ -239,75 +273,125 @@ export default function ChatScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={filtered.length === 0 ? { flex: 1 } : undefined}
       />
+
+      <TouchableOpacity
+        onPress={() => setShowModal(true)}
+        style={styles.fab}
+        activeOpacity={0.8}
+      >
+        <Feather name="message-circle" size={24} color="white" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#0a0f1e" },
+  safe: { flex: 1, backgroundColor: "#000000" },
 
-  searchWrap: {
+  // search bar
+  searchContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    backgroundColor: "#000000",
+  },
+
+  clearIcon: {
+    color: "#ffffff",
+    fontSize: 18,
+    paddingLeft: 10,
+  },
+
+  searchBox: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 20,
-    marginBottom: 12,
-    backgroundColor: "rgba(255,255,255,0.05)",
-    borderRadius: 14,
+    backgroundColor: "#000000",
+    paddingHorizontal: 16,
+    height: 45,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    gap: 10,
+    borderColor: "#ffffff",
   },
 
-  searchIcon: { fontSize: 14, opacity: 0.5 },
-  searchInput: {
+  searchInputNew: {
     flex: 1,
-    color: "#e2e8f0",
-    fontSize: 15,
+    color: "#ffffff",
+    fontSize: 22,
+    fontFamily: "VT323_400Regular",
   },
 
-  clearBtn: {
-    color: "#64748b",
-    fontSize: 13,
-  },
-
+    // filter options
   filterRow: {
+    backgroundColor: "#ffffff",
     flexDirection: "row",
     paddingHorizontal: 20,
-    marginBottom: 8,
+    marginBottom: 1,
     gap: 8,
   },
 
   tab: {
     paddingHorizontal: 16,
     paddingVertical: 6,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.1)",
+    marginVertical: 4,
+    borderWidth: 2,
+    borderColor: "#000000",
   },
 
   tabActive: {
     paddingHorizontal: 16,
     paddingVertical: 6,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#6366f1",
-    backgroundColor: "rgba(99,102,241,0.15)",
+    marginVertical: 4,
+    backgroundColor: "#000000",
   },
 
-  tabText: { color: "#64748b", fontSize: 13 },
-  tabTextActive: {
-    color: "#a5b4fc",
-    fontSize: 13,
-    fontWeight: "600",
+  tabText: {
+    color: "#000000",
+    fontSize: 20,
+    fontFamily: "VT323_400Regular",
   },
+
+  tabTextActive: {
+    color: "#ffffff",
+    fontSize: 20,
+    fontFamily: "VT323_400Regular",
+  },
+
+  
+
+  pixelWrapper: {
+    position: "relative",
+    alignSelf: "flex-start",
+  },
+
+  pixelShadow: {
+    position: "absolute",
+    top: 6,
+    left: 6,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "#ffffff",
+  },
+
+  pixelButton: {
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 1,
+    borderWidth: 3,
+    borderColor: "#000000",
+  },
+
+  pixelText: {
+    fontSize: 22,
+    color: "#000000",
+    fontFamily: "VT323_400Regular",
+    letterSpacing: 3,
+  },
+
+
+
 
   chatItem: {
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(255,255,255,0.04)",
+    borderBottomColor: "#000000",
   },
 
   chatInfo: { flex: 1 },
@@ -319,14 +403,14 @@ const styles = StyleSheet.create({
   },
 
   chatName: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#f1f5f9",
+    fontSize: 20,
+    fontFamily: "VT323_400Regular",
+    color: "#000000",
   },
 
   chatTime: {
     fontSize: 12,
-    color: "#475569",
+    color: "#000000",
   },
 
   chatBottom: {
@@ -335,9 +419,10 @@ const styles = StyleSheet.create({
   },
 
   lastMsg: {
-    fontSize: 14,
-    color: "#64748b",
+    fontSize: 20,
+    color: "#000000",
     flex: 1,
+    fontFamily: "VT323_400Regular",
     marginRight: 8,
   },
 
@@ -349,9 +434,10 @@ const styles = StyleSheet.create({
   },
 
   badgeText: {
-    color: "#fff",
+    color: "#ffffff",
     fontSize: 11,
-    fontWeight: "700",
+    // fontWeight: "700",
+    fontFamily: "VT323_400Regular",
   },
 
   empty: {
@@ -359,7 +445,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  fab: {
+    position: "absolute",
+    bottom: 30,
+    right: 20,
+    width: 60,
+    height: 50,
+    borderRadius: 7,
+    backgroundColor: "#000000",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
 
+    // Elevation (Android)
+    elevation: 8,
+  },
   emptyIcon: { fontSize: 40, marginBottom: 12 },
-  emptyText: { color: "#94a3b8", fontSize: 15 },
+  emptyText: { color: "#000000", fontSize: 14 },
 });

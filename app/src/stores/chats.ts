@@ -9,36 +9,32 @@ interface ChatRoomState {
 }
 
 interface ChatStore {
-
   chats: Record<string, ChatRoomState>;
-
-  addMessage: (roomId: string, message: ChatMessage) => void;
+  addMessage: (reciverKey : string, message: ChatMessage) => void;
   //   markMessageAsRead: (roomId: string, messageId: string) => void;
   //   markRoomAsRead: (roomId: string) => void;
-  clearRoom: (roomId: string) => void;
+  clearRoom: (reciverKey: string) => void;
 }
 
 export const useChatStore = create<ChatStore>()(
   persist((set, get) => ({
     chats: {},
 
-    addMessage: (roomId, message) =>
+    addMessage: (reciverKey, message) =>
       set((state) => {
-        console.log("hi there ");
-
-        const room = state.chats[roomId] ?? {
+        const room = state.chats[reciverKey] ?? {
           messages: [],
           unreadCount: 0,
         };
 
         const isIncoming =
           message.status !== "read" &&
-          message.senderKey !== "user1"; // current user
+          message.senderKey !== "user2"; // current user
 
         return {
           chats: {
             ...state.chats,
-            [roomId]: {
+            [reciverKey]: {
               messages: [...room.messages, message],
               unreadCount: isIncoming
                 ? room.unreadCount + 1
@@ -99,10 +95,10 @@ export const useChatStore = create<ChatStore>()(
     //       };
     //     }),
 
-    clearRoom: (roomId) =>
+    clearRoom: (reciverKey) =>
       set((state) => {
         const updated = { ...state.chats };
-        delete updated[roomId];
+        delete updated[reciverKey];
         return { chats: updated };
       }),
 
