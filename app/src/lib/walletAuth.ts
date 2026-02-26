@@ -3,10 +3,10 @@ import {
     Web3MobileWallet,
 } from "@solana-mobile/mobile-wallet-adapter-protocol-web3js";
 import axios from "axios"
-import { APP_IDENTITY, BACKEND_URL_USB } from "../config";
+import { APP_IDENTITY, BACKEND_URL_EMULATER, BACKEND_URL_USB } from "../config";
 import { mmkvStorage } from "@/lib/storage";
-import * as BufferModule from "buffer"
-window.Buffer = BufferModule.Buffer;
+// import * as BufferModule from "buffer"
+// window.Buffer = BufferModule.Buffer;
 
 async function connectWallet() {
     return await transact(async (wallet: Web3MobileWallet) => {
@@ -67,7 +67,7 @@ export async function checkUserExist() {
         }
 
         // 2. nonce from server. 
-        const nonceResponse = await axios.post(`${BACKEND_URL_USB}/user/check`, {
+        const nonceResponse = await axios.post(`${BACKEND_URL_EMULATER}/user/check`, {
             "publicKey": connectWalletresponse.address
         })
 
@@ -85,14 +85,14 @@ export async function checkUserExist() {
         // 4. verifying nonce...  if true issue JWT
 
         const signatureBase64 = Buffer.from(signedMessages[0]).toString("base64")
-        const JWTResponse = await axios.post(`${BACKEND_URL_USB}/auth/verify/nonce`, {
+
+        const JWTResponse = await axios.post(`${BACKEND_URL_EMULATER}/auth/verify/nonce`, {
             publicKey: connectWalletresponse.address,
             signature: signatureBase64,
             signedMessage: message
 
-        })
-        console.log(connectWalletresponse);
-
+        }
+        )
 
         mmkvStorage.setItem("auth_user", JSON.stringify({
             publicKey: connectWalletresponse.address,

@@ -3,6 +3,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { mmkvStorage } from "@/lib/storage";
 import { Redirect } from "expo-router";
+import "../src/polyfills";
 
 export default function RootLayout() {
   const segments = useSegments();

@@ -15,12 +15,13 @@ export default function LoginScreen() {
       setLoading(true);
       setError(null);
 
+      console.log("before checkUserExist");
+
       const result = await checkUserExist();
 
-      console.log(result);
-      
+      console.log("result =>  ", result?.data);
 
-      if (!result?.token || !result?.publicKey) {
+      if (!result?.data.token || !result?.data.user.pubKey) {
         throw new Error("Authentication failed");
       }
 
@@ -28,8 +29,8 @@ export default function LoginScreen() {
       mmkvStorage.setItem(
         "auth_user",
         JSON.stringify({
-          publicKey: result.publicKey,
-          token: result.token,
+          publicKey: result.data.user.pubKey,
+          token: result.data.token,
         }),
       );
 
