@@ -16,6 +16,8 @@ import { ChatMessage } from "@/types/chat";
 export default function ChatScreen() {
   const router = useRouter();
   const { chats } = useChatStore();
+  const [showModal, setShowModal] = useState(false);
+  const [newChatPubKey, setNewChatPubKey] = useState("");
 
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "unread">("all");
@@ -114,7 +116,81 @@ export default function ChatScreen() {
         )}
       </View>
 
-      <TouchableOpacity onPress={() => router.push(`chat/${123}`)}>
+      {showModal && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.6)",
+            justifyContent: "center",
+            padding: 24,
+            zIndex: 999,
+            elevation: 10,
+          }}
+          pointerEvents="auto"
+        >
+          <View
+            style={{
+              backgroundColor: "#1e293b",
+              padding: 20,
+              borderRadius: 12,
+            }}
+          >
+            <Text style={{ color: "white", marginBottom: 12 }}>
+              Enter Recipient Public Key
+            </Text>
+
+            <TextInput
+              value={newChatPubKey}
+              onChangeText={setNewChatPubKey}
+              placeholder="Solana Public Key"
+              placeholderTextColor="#64748b"
+              style={{
+                backgroundColor: "#0f172a",
+                color: "white",
+                padding: 12,
+                borderRadius: 8,
+                marginBottom: 16,
+              }}
+            />
+
+            <TouchableOpacity
+              onPress={() => {
+                if (!newChatPubKey.trim()) return;
+
+                setShowModal(false);
+
+                router.push({
+                  pathname: "/chat/[roomId]",
+                  params: { roomId: newChatPubKey.trim() },
+                });
+
+                setNewChatPubKey("");
+              }}
+              style={{
+                backgroundColor: "#6366f1",
+                padding: 12,
+                borderRadius: 8,
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: "white" }}>Start Chat</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setShowModal(false)}
+              style={{ marginTop: 10, alignItems: "center" }}
+            >
+              <Text style={{ color: "#94a3b8" }}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+      <TouchableOpacity onPress={() => setShowModal(true)}>
         <Text style={{ color: "red" }}>New Chat</Text>
       </TouchableOpacity>
 
@@ -145,6 +221,7 @@ export default function ChatScreen() {
 
       {/* List */}
       <FlatList
+        keyboardShouldPersistTaps="handled"
         data={filtered}
         keyExtractor={(item) => item.roomId}
         renderItem={({ item }) => (

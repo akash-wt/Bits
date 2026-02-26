@@ -21,7 +21,11 @@ export default function LoginScreen() {
 
       console.log("result =>  ", result?.data);
 
-      if (!result?.data.token || !result?.data.user.pubKey) {
+      if (
+        !result?.data.token &&
+        !result?.data.user.pubKey &&
+        !result?.data.verified
+      ) {
         throw new Error("Authentication failed");
       }
 
