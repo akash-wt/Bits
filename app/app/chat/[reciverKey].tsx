@@ -36,6 +36,7 @@ export default function ChatDetail() {
       console.log("no chat room found while sending message");
       return;
     }
+    
 
     addMessage(chatRoomId, {
       id: getRandomUuid(),
