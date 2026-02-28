@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import getRandomUuid from "@/helper/UUID";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { shortenKey } from "@/lib/trimString";
 
 export default function ChatDetail() {
   const { reciverKey } = useLocalSearchParams();
@@ -66,14 +67,22 @@ export default function ChatDetail() {
         }}
         onPress={() => router.back()}
       >
-        <Ionicons name="arrow-back" size={24} color="#fff" />
-        <Text style={{ color: "#fff", fontSize: 16, marginLeft: 8 }}>
-          {reciverKey}
+        <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        <Text
+          style={{
+            color: "#fff",
+            marginLeft: 8,
+            fontFamily: "VT323_400Regular",
+            fontSize: 20,
+            letterSpacing: 2,
+          }}
+        >
+          {shortenKey(reciverKey.toString())}
         </Text>
       </TouchableOpacity>
 
       <FlatList
-        style={{ backgroundColor: "#0f172a" }}
+        style={{ backgroundColor: "#ffffff" }}
         ref={flatListRef}
         data={messages}
         keyExtractor={(item) => item.id}
@@ -85,14 +94,22 @@ export default function ChatDetail() {
             <View
               style={{
                 alignSelf: isMe ? "flex-end" : "flex-start",
-                backgroundColor: isMe ? "#6366f1" : "#1e293b",
+                backgroundColor: isMe ? "#000000" : "#000000",
                 padding: 10,
-                borderRadius: 16,
                 marginBottom: 8,
                 maxWidth: "75%",
               }}
             >
-              <Text style={{ color: "white" }}>{item.text}</Text>
+              <Text
+                style={{
+                  color: "#ffffff",
+                  fontFamily: "VT323_400Regular",
+                  fontSize: 18,
+                  letterSpacing: 0.5,
+                }}
+              >
+                {item.text}
+              </Text>
               <Text
                 style={{
                   fontSize: 10,
@@ -114,20 +131,21 @@ export default function ChatDetail() {
           flexDirection: "row",
           padding: 12,
           borderTopWidth: 1,
-          borderColor: "#1e293b",
-          backgroundColor: "#0f172a",
+          backgroundColor: "#ffffff",
         }}
       >
         <TextInput
           value={input}
           onChangeText={setInput}
           placeholder="Type a message..."
-          placeholderTextColor="#64748b"
+          placeholderTextColor="#ffffff"
           style={{
             flex: 1,
-            backgroundColor: "#1e293b",
-            color: "white",
-            borderRadius: 25,
+            fontFamily: "VT323_400Regular",
+            fontSize: 18,
+            letterSpacing: 2,
+            backgroundColor: "#000000",
+            color: "#ffffff",
             paddingHorizontal: 16,
             paddingVertical: 10,
             marginRight: 10,
@@ -137,13 +155,21 @@ export default function ChatDetail() {
         <TouchableOpacity
           onPress={sendMessage}
           style={{
-            backgroundColor: "#6366f1",
-            borderRadius: 25,
+            backgroundColor: "#000000",
             paddingHorizontal: 20,
             justifyContent: "center",
           }}
         >
-          <Text style={{ color: "white" }}>Send</Text>
+          <Text
+            style={{
+              color: "#ffffff",
+              fontFamily: "VT323_400Regular",
+              fontSize: 18,
+              letterSpacing: 2,
+            }}
+          >
+            Send
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
