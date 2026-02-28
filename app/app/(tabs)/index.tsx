@@ -230,7 +230,10 @@ export default function ChatScreen() {
         keyExtractor={(item) => item.roomId}
         renderItem={({ item }) => (
           <ChatRow
-            room={item}
+            room={{
+              ...item,
+              roomId: shortenKey(item.roomId.toString()),
+            }}
             onPress={() => router.push(`chat/${item.roomId}`)}
           />
         )}

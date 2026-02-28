@@ -7,6 +7,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useChatStore } from "@/stores/chats";
@@ -54,6 +55,7 @@ export default function ChatDetail() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#000000" }}>
+      <StatusBar barStyle="light-content" backgroundColor="#000000" />
       {/* Back Button */}
       <TouchableOpacity
         style={{

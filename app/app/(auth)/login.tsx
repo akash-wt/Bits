@@ -1,9 +1,15 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { checkUserExist } from "@/lib/walletAuth"; // your auth logic
+import { checkUserExist } from "@/lib/walletAuth";
 import { mmkvStorage } from "@/lib/storage";
+import { ImageBackground } from "react-native";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -49,58 +55,86 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#0f172a",
-        padding: 24,
-      }}
+    <ImageBackground
+      source={require("../../assets/auth.png")}
+      resizeMode="cover"
+      style={{ flex: 1 }}
     >
-      <Text
+      <SafeAreaView
         style={{
-          fontSize: 28,
-          fontWeight: "700",
-          color: "white",
-          marginBottom: 40,
-        }}
-      >
-        Connect Wallet
-      </Text>
-
-      <TouchableOpacity
-        onPress={handleLogin}
-        disabled={loading}
-        style={{
-          backgroundColor: "#6366f1",
-          paddingVertical: 14,
-          paddingHorizontal: 32,
-          borderRadius: 12,
-          width: "100%",
+          flex: 1,
+          justifyContent: "center",
           alignItems: "center",
+          backgroundColor: "rgba(0,0,0,0.6)",
+          padding: 24,
         }}
       >
-        {loading ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text style={{ color: "white", fontWeight: "600" }}>
-            Connect Solana Wallet
-          </Text>
-        )}
-      </TouchableOpacity>
+        <StatusBar barStyle="dark-content" backgroundColor="#000000" />
 
-      {error && (
-        <Text
+        <TouchableOpacity
+          onPress={handleLogin}
+          disabled={loading}
           style={{
-            color: "#ef4444",
-            marginTop: 20,
-            textAlign: "center",
+            backgroundColor: "#000000",
+            paddingVertical: 14,
+            paddingHorizontal: 32,
+            width: "100%",
+            alignItems: "center",
           }}
         >
-          {error}
-        </Text>
-      )}
-    </SafeAreaView>
+          {loading ? (
+            <View
+              style={{
+                backgroundColor: "#000000",
+                paddingHorizontal: 20,
+                width: "100%",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "#ffffff",
+                  fontSize: 21,
+                  letterSpacing: 2,
+                  paddingVertical:20,
+                  fontFamily: "VT323_400Regular",
+                }}
+              >
+                Fetching your Account...
+              </Text>
+            </View>
+          ) : (
+            <Text
+              style={{
+                color: "#ffffff",
+                fontWeight: "600",
+                fontSize: 25,
+                letterSpacing: 2,
+                fontFamily: "VT323_400Regular",
+              }}
+            >
+              Connect Solana Wallet
+            </Text>
+          )}
+        </TouchableOpacity>
+
+        {error && (
+          <Text
+            style={{
+              color: "#ef4444",
+              marginTop: 20,
+              fontSize: 20,
+              padding: 10,
+              backgroundColor: "#000000",
+              textAlign: "center",
+              letterSpacing: 2,
+              fontFamily: "VT323_400Regular",
+            }}
+          >
+            {error}
+          </Text>
+        )}
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
