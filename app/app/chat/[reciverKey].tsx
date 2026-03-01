@@ -12,7 +12,7 @@ import {
 import { useLocalSearchParams } from "expo-router";
 import { useChatStore } from "@/stores/chats";
 import { SafeAreaView } from "react-native-safe-area-context";
-import getRandomUuid from "@/helper/UUID";
+import getRandomUuid from "@/lib/UUID";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { shortenKey } from "@/lib/trimString";

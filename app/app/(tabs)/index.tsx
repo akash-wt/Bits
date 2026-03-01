@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   FlatList,
   StyleSheet,
   StatusBar,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -15,6 +16,8 @@ import { ChatMessage } from "@/types/chat";
 import { mmkvStorage } from "@/lib/storage";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { shortenKey } from "@/lib/trimString";
+import { PublicKey } from "@solana/web3.js";
+import { socket } from "@/socket/socket";
 
 export default function ChatScreen() {
   const router = useRouter();
@@ -26,6 +29,36 @@ export default function ChatScreen() {
   const shortKey = user?.publicKey ? shortenKey(user.publicKey) : "";
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [isConnected, setIsConnected] = useState(false);
+  const [transport, setTransport] = useState("N/A");
+
+  useEffect(() => {
+    if (socket.connected) {
+      onConnect();
+    }
+
+    function onConnect() {
+      setIsConnected(true);
+      setTransport(socket.io.engine.transport.name);
+
+      socket.io.engine.on("upgrade", (transport) => {
+        setTransport(transport.name);
+      });
+    }
+
+    function onDisconnect() {
+      setIsConnected(false);
+      setTransport("N/A");
+    }
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
 
   // Converts rooms object → array
   const rooms = Object.entries(chats).map(([roomId, room]) => {
@@ -101,6 +134,19 @@ export default function ChatScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
+      {/*  socket demo testing  */}
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "#fff",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text>Status: {isConnected ? "connected" : "disconnected"}</Text>
+        <Text>Transport: {transport}</Text>
+      </View>
+
       {/* header */}
       <View
         style={{
@@ -171,16 +217,25 @@ export default function ChatScreen() {
 
             <TouchableOpacity
               onPress={() => {
-                if (!newChatPubKey.trim()) return;
+                try {
+                  const trimmed = newChatPubKey.trim();
+                  if (!trimmed) return;
 
-                setShowModal(false);
+                  const chatPubKey = new PublicKey(trimmed);
 
-                router.push({
-                  pathname: "/chat/[roomId]",
-                  params: { roomId: newChatPubKey.trim() },
-                });
+                  router.push({
+                    pathname: "/chat/[roomId]",
+                    params: { roomId: chatPubKey.toBase58() },
+                  });
 
-                setNewChatPubKey("");
+                  setNewChatPubKey("");
+                  setShowModal(false);
+                } catch {
+                  Alert.alert(
+                    "Invalid Public Key",
+                    "Please enter a valid Solana address.",
+                  );
+                }
               }}
               style={styles.showModelNewChatButton}
             >
