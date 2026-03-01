@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useChatStore } from "@/stores/chats";
-import { ChatMessage } from "@/types/chat";
+import { ChatMessage } from "@/stores/chats";
 import { mmkvStorage } from "@/lib/storage";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { shortenKey } from "@/lib/trimString";
@@ -134,18 +134,6 @@ export default function ChatScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
-      {/*  socket demo testing  */}
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "#fff",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text>Status: {isConnected ? "connected" : "disconnected"}</Text>
-        <Text>Transport: {transport}</Text>
-      </View>
 
       {/* header */}
       <View
@@ -220,7 +208,6 @@ export default function ChatScreen() {
                 try {
                   const trimmed = newChatPubKey.trim();
                   if (!trimmed) return;
-
                   const chatPubKey = new PublicKey(trimmed);
 
                   router.push({
@@ -309,6 +296,19 @@ export default function ChatScreen() {
       >
         <Feather name="message-circle" size={24} color="white" />
       </TouchableOpacity>
+
+      {/*  socket demo testing  */}
+      {/* <View
+        style={{
+          flex: 1,
+          backgroundColor: "#fff",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text>Status: {isConnected ? "connected" : "disconnected"}</Text>
+        <Text>Transport: {transport}</Text>
+      </View> */}
     </SafeAreaView>
   );
 }

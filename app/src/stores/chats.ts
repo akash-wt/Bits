@@ -1,7 +1,16 @@
 import { create } from "zustand";
-import { ChatMessage } from "@/types/chat";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { mmkvStorage } from "../lib/storage";
+
+export interface ChatMessage {
+  id: string;
+  text: string;
+  senderKey: string;
+  reciverKey: string;
+  createdAt: number; // store as timestamp
+  status: MessageStatus
+}
+type MessageStatus = "sent" | "delivered" | "read";
 
 interface ChatRoomState {
   messages: ChatMessage[];
@@ -10,7 +19,7 @@ interface ChatRoomState {
 
 interface ChatStore {
   chats: Record<string, ChatRoomState>;
-  addMessage: (reciverKey : string, message: ChatMessage) => void;
+  addMessage: (reciverKey: string, message: ChatMessage) => void;
   //   markMessageAsRead: (roomId: string, messageId: string) => void;
   //   markRoomAsRead: (roomId: string) => void;
   clearRoom: (reciverKey: string) => void;
@@ -102,9 +111,9 @@ export const useChatStore = create<ChatStore>()(
         return { chats: updated };
       }),
 
-  }),{
-    name:"chat-storage",
-    storage:createJSONStorage(()=>mmkvStorage)
+  }), {
+    name: "chat-storage",
+    storage: createJSONStorage(() => mmkvStorage)
   })
 
 );
